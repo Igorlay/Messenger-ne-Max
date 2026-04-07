@@ -2,52 +2,117 @@ import { useState } from "react";
 import Header from "./components/molecules/Header/Header";
 import Post from "./components/molecules/Post/Post";
 import SearchBar from "./components/molecules/SearchBar/SearchBar";
-import { postsData } from "./data";
+import { students } from "./data";
 import styles from "./App.module.css";
 
 function App() {
+  // 🔹 1. Help toggle
+  const [showHelp, setShowHelp] = useState(false);
 
-const [searchTerm, setSearchTerm] = useState("");
-const [activeCategory, setActiveCategory] = useState("All");
-// Логіка фільтрації
-const filteredPosts = postsData.filter(post => {
-const matchesSearch =
-post.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
-post.author.toLowerCase().includes(searchTerm.toLowerCase());
-const matchesCategory = activeCategory === "All" || post.category
-=== activeCategory;
-return matchesSearch && matchesCategory;
-});
+  // 🔹 2. Фільтр
+  const [filterActive, setFilterActive] = useState(false);
+
+  // 🔹 3. Tabs
+  const [activeTab, setActiveTab] = useState("list");
+
+  // 🔹 Фільтр студентів
+  const filteredStudents = students.filter(
+    (s) => (s.score ?? 0) >= 60
+  );
 
   return (
-    <>
-      <Header />
-<div className={styles.appContainer}>
-<h1>Стрічка з фільтрацією</h1>
-<SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm}
-/>
-<div className={styles.filters}>
+    <div className={styles.appContainer}>
+      <h1>Система студентів</h1>
 
-{["All", "News", "Updates"].map(cat => (
-<button
-key={cat}
-onClick={() => setActiveCategory(cat)}
-className={activeCategory === cat ? styles.active : ""}
->
-{cat}
-</button>
-))}
-</div>
-<div className={styles.feed}>
-{filteredPosts.length > 0 ? (
-filteredPosts.map(post => <Post key={post.id} {...post} />)
-) : (
-<p className={styles.empty}>Нічого не знайдено за вашим
-запитом.</p>
-)}
-</div>
-</div>
-    </>
+      {/* 🔹 КНОПКА ДОВІДКИ */}
+      <button onClick={() => setShowHelp(!showHelp)}>
+        {showHelp ? "Приховати інструкцію" : "Показати інструкцію"}
+      </button>
+
+      {showHelp && (
+        <p>Довідка: Дозволяє керувати списками студентів.</p>
+      )}
+
+      {/* 🔹 КНОПКА ФІЛЬТРА */}
+      <button onClick={() => setFilterActive(!filterActive)}>
+        {filterActive ? "Показати всіх" : "Показати тільки успішних"}
+      </button>
+
+      {/* 🔹 ТАБИ */}
+      <div style={{ marginTop: "20px" }}>
+        <button
+          onClick={() => setActiveTab("list")}
+          className={activeTab === "list" ? styles.activeTab : ""}
+        >
+          Всі студенти
+        </button>
+
+        <button
+          onClick={() => setActiveTab("stats")}
+          className={activeTab === "stats" ? styles.activeTab : ""}
+        >
+          Статистика
+        </button>
+
+        <button
+          onClick={() => setActiveTab("about")}
+          className={activeTab === "about" ? styles.activeTab : ""}
+        >
+          Про автора
+        </button>
+      </div>
+
+      {/* 🔹 КОНТЕНТ */}
+      <div className={styles.content}>
+        {activeTab === "list" && (
+          <>
+            {(filterActive ? filteredStudents : students).length > 0 ? (
+              (filterActive ? filteredStudents : students).map((student) => (
+                <div key={student.id}>
+                  <strong>{student.name}</strong> —{" "}
+                  
+                  {/* 🔹 Захист від undefined */}
+                  {student.score ?? "Оцінка відсутня"} —{" "}
+
+                  {/* 🔹 Колір + статус */}
+                  <span
+                    style={{
+                      color:
+                        (student.score ?? 0) >= 60 ? "green" : "red",
+                    }}
+                  >
+                    {(student.score ?? 0) >= 60
+                      ? "Зараховано"
+                      : "Незараховано"}
+                  </span>
+                </div>
+              ))
+            ) : (
+              <p>За вашим запитом нікого не знайдено</p>
+            )}
+          </>
+        )}
+
+        {activeTab === "stats" && (
+          <div>
+            <h3>Статистика</h3>
+            <p>
+              Кількість студентів: {students.length}
+            </p>
+            <p>
+              Успішні: {filteredStudents.length}
+            </p>
+          </div>
+        )}
+
+        {activeTab === "about" && (
+          <div>
+            <h3>Про автора</h3>
+            <p>Це навчальний проєкт на React 🚀</p>
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
 
