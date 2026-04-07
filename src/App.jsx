@@ -1,28 +1,52 @@
+import { useState } from "react";
 import Header from "./components/molecules/Header/Header";
 import Post from "./components/molecules/Post/Post";
+import SearchBar from "./components/molecules/SearchBar/SearchBar";
 import { postsData } from "./data";
 import styles from "./App.module.css";
 
 function App() {
+
+const [searchTerm, setSearchTerm] = useState("");
+const [activeCategory, setActiveCategory] = useState("All");
+// Логіка фільтрації
+const filteredPosts = postsData.filter(post => {
+const matchesSearch =
+post.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
+post.author.toLowerCase().includes(searchTerm.toLowerCase());
+const matchesCategory = activeCategory === "All" || post.category
+=== activeCategory;
+return matchesSearch && matchesCategory;
+});
+
   return (
     <>
       <Header />
+<div className={styles.appContainer}>
+<h1>Стрічка з фільтрацією</h1>
+<SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm}
+/>
+<div className={styles.filters}>
 
-      <div className={styles.appContainer}>
-        <h1 style={{ textAlign: "center" }}>Стрічка новин</h1>
-
-        <div className={styles.feed}>
-          {postsData.map((post) => (
-            <Post
-              key={post.id}
-              author={post.author}
-              content={post.content}
-              date={post.date}
-              avatar={post.avatar}
-            />
-          ))}
-        </div>
-      </div>
+{["All", "News", "Updates"].map(cat => (
+<button
+key={cat}
+onClick={() => setActiveCategory(cat)}
+className={activeCategory === cat ? styles.active : ""}
+>
+{cat}
+</button>
+))}
+</div>
+<div className={styles.feed}>
+{filteredPosts.length > 0 ? (
+filteredPosts.map(post => <Post key={post.id} {...post} />)
+) : (
+<p className={styles.empty}>Нічого не знайдено за вашим
+запитом.</p>
+)}
+</div>
+</div>
     </>
   );
 }
