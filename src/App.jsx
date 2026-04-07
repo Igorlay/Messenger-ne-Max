@@ -45,7 +45,7 @@ function App() {
             }}
           >
             <Button onClick={handleLogin} variant="primary">
-              Зайти
+              Увійти
             </Button>
             <Button variant="secondary">Реєстрація</Button>
           </div>
