@@ -1,4 +1,4 @@
-export const students = [
+export const postsData = [
   { id: 1, name: "Іван Петренко", score: 75, isActive: true },
   { id: 2, name: "Олена Коваль", score: 92, isActive: true },
   { id: 3, name: "Андрій Бондар", score: 55, isActive: false },

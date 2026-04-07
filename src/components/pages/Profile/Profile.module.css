@@ -1,0 +1,62 @@
+.profileLayout {
+  display: flex;
+  min-height: 100vh;
+  font-family: sans-serif;
+}
+
+.sidebar {
+  width: 220px;
+  background-color: #1e293b;
+  color: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sidebar h3 {
+  margin-bottom: 10px;
+}
+
+.sidebar a {
+  color: #cbd5f5;
+  text-decoration: none;
+  padding: 6px 8px;
+  border-radius: 6px;
+  transition: 0.2s;
+}
+
+.sidebar a:hover {
+  background-color: #334155;
+  color: white;
+}
+
+.content {
+  flex: 1;
+  padding: 24px;
+  background-color: #f1f5f9;
+}
+
+/* Форма */
+.content input {
+  display: block;
+  margin-top: 4px;
+  margin-bottom: 12px;
+  padding: 6px 8px;
+  width: 250px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.content button {
+  padding: 8px 14px;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.content button:hover {
+  background-color: #1d4ed8;
+}
