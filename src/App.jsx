@@ -5,6 +5,7 @@ import Login from "./components/pages/Login/Login";
 import Profile from "./components/pages/Profile/Profile";
 import ProtectedRoute from "./components/hoc/ProtectedRoute";
 import NewsFeed from "./components/hoc/NewsFeed";
+import Feed from "./components/pages/Feed/Feed";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route index element={<Home />} />
         <Route path="login" element={<Login />} />
         <Route path="newsfeed" element={<NewsFeed />} />
+        <Route path="feed" element={<Feed />} />
         {/* Захищений маршрут */}
         <Route element={<ProtectedRoute />}>
           <Route path="profile/*" element={<Profile />} />

@@ -1,23 +1,22 @@
-import Button from '../../atoms/Button/Button'; // З Лаб 1
-import Card from '../Card/Card'; // З Лаб 1
-import styles from './Post.module.css';
-const Post = ({ author, content, date, avatar }) => {
-return (
-<Card>
-<div className={styles.header}>
-<img src={avatar} alt="avatar" className={styles.avatar} />
-<div className={styles.info}>
-<span className={styles.author}>{author}</span>
-<span className={styles.date}>{date}</span>
-</div>
-</div>
-<p className={styles.content}>{content}</p>
-<div className={styles.actions}>
-{/* Використовуємо кнопку з Лаб 1 */}
-<Button variant="secondary">Лайк</Button>
-<Button variant="primary">Коментувати</Button>
-</div>
-</Card>
-);
-};
+import { useState } from "react";
+
+function Post({ id, title, content, author }) {
+  const [likes, setLikes] = useState(0);
+
+  const handleLike = () => {
+    // Тут ми зробимо помилку у завданні №2
+    setLikes(likes + 1);
+  };
+
+  return (
+    <div style={{ border: "1px solid gray", padding: "10px", margin: "5px" }}>
+      <h3>{title}</h3>
+      <p>{content}</p>
+      <small>Автор: {author}</small>
+      <br />
+      <button onClick={handleLike}>Like ({likes})</button>
+    </div>
+  );
+}
+
 export default Post;

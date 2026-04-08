@@ -1,19 +1,47 @@
+import { useState } from "react";
+import Post from "../../molecules/Post/Post";
+
+const mockPosts = [
+  {
+    id: 1,
+    title: "Вивчаємо React",
+    content: "Основи компонентів.",
+    author: "Іван",
+  },
+  {
+    id: 2,
+    title: "Хуки у React",
+    content: "UseState та UseEffect - це важливо.",
+    author: "Petro",
+  },
+];
+
 const Feed = () => {
-  const posts = [
-    { id: 1, title: "Перший пост", content: "Це мій перший пост!" },
-    { id: 2, title: "Другий пост", content: "Ще один запис у стрічці." },
-  ];
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const filteredPosts = mockPosts.filter((post) => {
+    const matchesSearch =
+      post.content.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      post.author.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesSearch;
+  });
 
   return (
     <div>
-      <h1>Стрічка</h1>
-
-      {posts.map((post) => (
-        <div key={post.id} style={{ marginBottom: "16px" }}>
-          <h3>{post.title}</h3>
-          <p>{post.content}</p>
-        </div>
-      ))}
+      <h2>Стрічка новин</h2>
+      <input
+        type="text"
+        placeholder="Пошук..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+      <div>
+        {filteredPosts.length > 0 ? (
+          filteredPosts.map((post) => <Post key={post.id} {...post} />)
+        ) : (
+          <p>Нічого не знайдено за вашим запитом.</p>
+        )}
+      </div>
     </div>
   );
 };
