@@ -1,23 +1,13 @@
 import { Routes, Route } from "react-router-dom";
-import MainLayout from "./components/templates/MainLayout/MainLayout";
-import Home from "./components/pages/Home/Home";
-import Login from "./components/pages/Login/Login";
-import Profile from "./components/pages/Profile/Profile";
-import ProtectedRoute from "./components/hoc/ProtectedRoute";
 import NewsFeed from "./components/hoc/NewsFeed";
+import PostDetails from "./pages/PostDetails.jsx";
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<MainLayout />}>
-        <Route index element={<Home />} />
-        <Route path="login" element={<Login />} />
-        <Route path="newsfeed" element={<NewsFeed />} />
-        {/* Захищений маршрут */}
-        <Route element={<ProtectedRoute />}>
-          <Route path="profile/*" element={<Profile />} />
-        </Route>
-      </Route>
+      <Route path="/" element={<NewsFeed />} />
+      {/* Динамічний маршрут: postId буде змінною */}
+      <Route path="/post/:postId" element={<PostDetails />} />
     </Routes>
   );
 }

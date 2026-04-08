@@ -1,47 +1,80 @@
-import React, { useState } from "react";
-import { useCocktails } from "../hoc/useCocktails";
-import CocktailCard from "../CocktailCard";
+import { useSearchParams } from "react-router-dom";
+
+const postsData = [
+  { id: 1, title: "Вивчення React Router" },
+  { id: 2, title: "Новини JavaScript" },
+  { id: 3, title: "Що нового у Vite" },
+];
 
 const NewsFeed = () => {
-  const [query, setQuery] = useState("margarita");
-  const { drinks, isLoading, error } = useCocktails(query);
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    // useCocktails автоматично підхоплює query з state
+  const searchQuery = searchParams.get("query") || "";
+  const sort = searchParams.get("sort") || "asc";
+
+  // 🔍 Поиск
+  const handleSearchChange = (e) => {
+    const text = e.target.value;
+
+    const params = {};
+    if (text) params.query = text;
+    if (sort) params.sort = sort;
+
+    setSearchParams(params);
   };
 
+  // 🔽 Сортировка
+  const handleSortChange = (e) => {
+    const value = e.target.value;
+
+    const params = {};
+    if (searchQuery) params.query = searchQuery;
+    if (value) params.sort = value;
+
+    setSearchParams(params);
+  };
+
+  // 1️⃣ Фильтрация
+  const filteredPosts = postsData.filter((post) =>
+    post.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  // 2️⃣ Сортировка
+  const sortedPosts = [...filteredPosts].sort((a, b) => {
+    if (sort === "asc") {
+      return a.title.localeCompare(b.title);
+    } else {
+      return b.title.localeCompare(a.title);
+    }
+  });
+
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Коктейлі</h2>
+    <div>
+      <h2>Стрічка новин</h2>
 
-      <form onSubmit={handleSearch} style={{ marginBottom: "20px" }}>
-        <input
-          type="text"
-          placeholder="Пошук коктейлю..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          style={{ padding: "6px", width: "200px", marginRight: "10px" }}
-        />
-        <button type="submit" style={{ padding: "6px 12px" }}>
-          Пошук
-        </button>
-      </form>
+      {/* 🔍 Поиск */}
+      <input
+        type="text"
+        placeholder="Пошук новин..."
+        value={searchQuery}
+        onChange={handleSearchChange}
+      />
 
-      {isLoading && <p>Завантаження коктейлів...</p>}
-      {error && <p style={{ color: "red" }}>Помилка: {error}</p>}
+      {/* 🔽 Сортировка */}
+      <select value={sort} onChange={handleSortChange}>
+        <option value="asc">Від А до Я</option>
+        <option value="desc">Від Я до А</option>
+      </select>
 
-      <div
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "15px",
-        }}
-      >
-        {drinks.length === 0 && !isLoading && <p>Нічого не знайдено 😢</p>}
-        {drinks.map((drink) => (
-          <CocktailCard key={drink.idDrink} drink={drink} />
-        ))}
+      {/* 📃 Список */}
+      <div>
+        {sortedPosts.length > 0 ? (
+          sortedPosts.map((post) => (
+            <p key={post.id}>{post.title}</p>
+          ))
+        ) : (
+          <p>Нічого не знайдено 😢</p>
+        )}
       </div>
     </div>
   );
