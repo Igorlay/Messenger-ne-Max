@@ -12,6 +12,8 @@ end>Головна</NavLink>
 className={getActiveClass}>Стрічка</NavLink>
 <NavLink to="/newsfeed"
 className={getActiveClass}>Форма</NavLink>
+<NavLink to="/themetoogle"
+className={getActiveClass}>Зміна теми</NavLink>
 <NavLink to="/profile"
 className={getActiveClass}>Профіль</NavLink>
 </nav>
