@@ -1,39 +1,37 @@
-import React from "react";
-import useWindowSize from "../../hooks/useWindowSize";
+// src/pages/NewsFeed.jsx (Фрагмент)
+import { useState, useMemo } from "react";
+
+// Це ДУЖЕ повільна функція.
+// Вона займає ~100-300 мілісекунд при кожному своєму виклику.
+const generateHeavyAnalytics = (num) => {
+  console.log("Запуск важких обчислень...");
+  let result = 0;
+  for (let i = 0; i < 10000; i++) {
+    result += num;
+  }
+  return result;
+};
 
 const NewsFeed = () => {
-  const { width = window.innerWidth } = useWindowSize();
+  const [inputValue, setInputValue] = useState("");
+  const [analyticsNumber, setAnalyticsNumber] = useState(1);
 
-  const isMobile = width < 768;
+  // ВИКЛИК ПОМИЛКИ: Ми викликаємо функцію ТУТ, тобто при КОЖНОМУ рендері NewsFeed
+  const analyticsResult = useMemo(() => {
+    return generateHeavyAnalytics(analyticsNumber);
+  }, [analyticsNumber]);
 
   return (
     <div style={{ padding: "20px" }}>
-      <h2>Стрічка Новин</h2>
+      <h1>Стрічка новин</h1>
+      <p>Результат аналітики: {analyticsResult}</p>
 
-      {isMobile && (
-        <div
-          style={{
-            background: "#ffe4e1",
-            padding: "10px",
-            marginBottom: "15px",
-            borderRadius: "6px",
-          }}
-        >
-          📱 Ви переглядаєте мобільну версію
-        </div>
-      )}
-
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)",
-          gap: "20px",
-        }}
-      >
-        <div style={{ background: "#eee", padding: "20px" }}>Пост 1</div>
-        <div style={{ background: "#eee", padding: "20px" }}>Пост 2</div>
-        <div style={{ background: "#eee", padding: "20px" }}>Пост 3</div>
-      </div>
+      {/* Простий інпут. Він зберігає свій текст у стейт inputValue */}
+      <input
+        placeholder="Пошук (друкуйте повільно)..."
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
+      />
     </div>
   );
 };
