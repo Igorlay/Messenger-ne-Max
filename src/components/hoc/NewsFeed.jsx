@@ -1,37 +1,25 @@
-// src/pages/NewsFeed.jsx (Фрагмент)
-import { useState, useMemo } from "react";
-
-// Це ДУЖЕ повільна функція.
-// Вона займає ~100-300 мілісекунд при кожному своєму виклику.
-const generateHeavyAnalytics = (num) => {
-  console.log("Запуск важких обчислень...");
-  let result = 0;
-  for (let i = 0; i < 10000; i++) {
-    result += num;
-  }
-  return result;
-};
+import { useStore } from "../../store/useStore";
 
 const NewsFeed = () => {
-  const [inputValue, setInputValue] = useState("");
-  const [analyticsNumber, setAnalyticsNumber] = useState(1);
+  const posts = useStore((state) => state.posts);
+  const searchQuery = useStore((state) => state.searchQuery);
+  const setSearchQuery = useStore((state) => state.setSearchQuery);
 
-  // ВИКЛИК ПОМИЛКИ: Ми викликаємо функцію ТУТ, тобто при КОЖНОМУ рендері NewsFeed
-  const analyticsResult = useMemo(() => {
-    return generateHeavyAnalytics(analyticsNumber);
-  }, [analyticsNumber]);
+  const filteredPosts = posts.filter((post) =>
+    post.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Стрічка новин</h1>
-      <p>Результат аналітики: {analyticsResult}</p>
-
-      {/* Простий інпут. Він зберігає свій текст у стейт inputValue */}
+    <div>
       <input
-        placeholder="Пошук (друкуйте повільно)..."
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        placeholder="Пошук..."
       />
+
+      {filteredPosts.map((post) => (
+        <p key={post.id}>{post.title}</p>
+      ))}
     </div>
   );
 };
