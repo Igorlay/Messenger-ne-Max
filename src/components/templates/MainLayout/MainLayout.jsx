@@ -10,6 +10,8 @@ return (
 end>Головна</NavLink>
 <NavLink to="/feed"
 className={getActiveClass}>Стрічка</NavLink>
+<NavLink to="/student"
+className={getActiveClass}>Форма</NavLink>
 <NavLink to="/profile"
 className={getActiveClass}>Профіль</NavLink>
 </nav>
