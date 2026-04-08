@@ -8,9 +8,9 @@ return (
 <nav className={styles.navbar}>
 <NavLink to="/" className={getActiveClass}
 end>Головна</NavLink>
-<NavLink to="/feed"
+<NavLink to="/shop"
 className={getActiveClass}>Стрічка</NavLink>
-<NavLink to="/student"
+<NavLink to="/profilepage"
 className={getActiveClass}>Форма</NavLink>
 <NavLink to="/profile"
 className={getActiveClass}>Профіль</NavLink>
