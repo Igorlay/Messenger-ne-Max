@@ -4,6 +4,7 @@ import Home from "./components/pages/Home/Home";
 import Login from "./components/pages/Login/Login";
 import Profile from "./components/pages/Profile/Profile";
 import ProtectedRoute from "./components/hoc/ProtectedRoute";
+import NewsFeed from "./components/hoc/NewsFeed";
 
 function App() {
   return (
@@ -11,7 +12,7 @@ function App() {
       <Route path="/" element={<MainLayout />}>
         <Route index element={<Home />} />
         <Route path="login" element={<Login />} />
-
+        <Route path="newsfeed" element={<NewsFeed />} />
         {/* Захищений маршрут */}
         <Route element={<ProtectedRoute />}>
           <Route path="profile/*" element={<Profile />} />
